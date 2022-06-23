@@ -6,19 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>KLEE | Taro Puree&#39;s BLOG</title>
+  <title>KLEE学习总结 | Taro Puree&#39;s BLOG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="On Ubuntu 18.04">
 <meta property="og:type" content="article">
-<meta property="og:title" content="KLEE">
+<meta property="og:title" content="KLEE学习总结">
 <meta property="og:url" content="http://example.com/2022/06/22/KLEE/index.html">
 <meta property="og:site_name" content="Taro Puree&#39;s BLOG">
 <meta property="og:description" content="On Ubuntu 18.04">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-06-22T06:28:49.000Z">
-<meta property="article:modified_time" content="2022-06-23T05:22:36.348Z">
+<meta property="article:modified_time" content="2022-06-23T12:00:03.016Z">
 <meta property="article:author" content="Lanninger">
 <meta property="article:tag" content="security">
+<meta property="article:tag" content="tutorial">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="Taro Puree&#39;s BLOG" type="application/atom+xml">
@@ -158,7 +159,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      KLEE
+      KLEE学习总结
     </h1>
   
 
@@ -175,12 +176,20 @@
 <span id="more"></span>
 <h2 id="Getting-started"><a href="#Getting-started" class="headerlink" title="Getting started"></a>Getting started</h2><p>参考 <a target="_blank" rel="noopener" href="http://klee.github.io/getting-started/">KLEE官方文档</a>，选择 Build from source against LLVM 11</p>
 <p><strong>Step1: Install dependencies</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install build-essential cmake curl file g++-multilib gcc-multilib git libcap-dev libgoogle-perftools-dev libncurses5-dev libsqlite3-dev libtcmalloc-minimal4 python3-pip unzip graphviz doxygen</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install build-essential cmake curl file g++-multilib gcc-multilib git libcap-dev libgoogle-perftools-dev libncurses5-dev libsqlite3-dev libtcmalloc-minimal4 python3-pip unzip graphviz doxygen</span><br></pre></td></tr></table></figure>
 <p>其它：lit &#x3D;&gt; 实现测试，tabulate &#x3D;&gt; klee-stats 和 wllvm 的额外功能，使其更容易将程序编译为LLVM bitcode</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo pip3 install lit wllvm</span><br><span class="line">sudo apt-get install python3-tabulate</span><br></pre></td></tr></table></figure>
-<p><strong>Step2: Install LLVM 11</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install clang-11 llvm-11 llvm-11-dev llvm-11-tools</span><br></pre></td></tr></table></figure>
+<p><strong>Step2: Install LLVM 11</strong><br>Ubuntu 18.04似乎没有办法直接apt-get install llvm11，需要通过llvm docs <a target="_blank" rel="noopener" href="https://llvm.org/docs/GettingStarted.html#getting-started-with-llvm">Getting Started with the LLVM System</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/llvm/llvm-project.git</span><br><span class="line">cd llvm-project</span><br><span class="line">mkdir build</span><br><span class="line">cd build</span><br><span class="line">cmake -DLLVM_ENABLE_PROJECTS=clang </span><br><span class="line"># 注意这一步可能需要安装较新版本的 cmake</span><br><span class="line">-DCMAKE_BUILD_TYPE=Release -G &quot;Unix Makefiles&quot; ../llvm</span><br><span class="line">make</span><br><span class="line"># make 之后还是没有clang命令，据说是要把llvm/build/bin加到path里面</span><br><span class="line">make install    # 查了网上的解决方法，成功了</span><br></pre></td></tr></table></figure>
+<p>cmake 安装</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 使用安装命令</span><br><span class="line">sudo apt install cmake</span><br><span class="line"># 可能得到的不是最新版本的 cmake，需要卸载</span><br><span class="line">sudo apt-get remove cmake</span><br><span class="line"></span><br><span class="line"># 从cmake官网下载源码，解压文件</span><br><span class="line">tar -zxv -f cmake-3.xx.x.tar.gz</span><br><span class="line"># 进入解压后的 cmake 文件夹</span><br><span class="line">./bootstrap</span><br><span class="line">make    # 编译</span><br><span class="line">sudo make install   # 安装</span><br><span class="line"></span><br><span class="line"># 验证</span><br><span class="line">cmake --version</span><br></pre></td></tr></table></figure>
 
+<p><strong>Step3: Install constraint solver(s)</strong></p>
+<p>选择了STP</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 依赖</span><br><span class="line">sudo apt-get install cmake bison flex libboost-all-dev python perl zlib1g-dev minisat</span><br><span class="line"></span><br><span class="line"># 安装</span><br><span class="line">git clone https://github.com/stp/stp.git</span><br><span class="line">cd stp</span><br><span class="line">git checkout tags/2.3.3</span><br><span class="line">mkdir build</span><br><span class="line">cd build</span><br><span class="line">cmake ..</span><br><span class="line">make</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
+<p>在对更大的 benchmark 运行带有STP的KLEE之前，必须将堆栈的大小设置为非常大的值</p>
+<p>变成永久化可以更改 <code>/etc/security/limits.conf</code> 或者写到 <code>.bashrc</code>里面</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ulimit -s unlimited</span><br></pre></td></tr></table></figure>
 
 
       
@@ -196,6 +205,10 @@
 			 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">security</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">tutorial</a>
         		</li>
       		
 		</ul>
@@ -403,11 +416,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">daily</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">security</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">daily</a>
+                <a href="javascript:void(0)" class="js-tag color4">tutorial</a>
               </li>
              
               <li class="article-tag-list-item">
