@@ -16,7 +16,7 @@
 <meta property="og:description" content="On Ubuntu 18.04">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-06-22T06:28:49.000Z">
-<meta property="article:modified_time" content="2022-06-27T15:56:03.670Z">
+<meta property="article:modified_time" content="2022-07-05T06:42:25.437Z">
 <meta property="article:author" content="Lanninger">
 <meta property="article:tag" content="security">
 <meta property="article:tag" content="tutorial">
@@ -174,13 +174,16 @@
       
         <p>On Ubuntu 18.04</p>
 <span id="more"></span>
-<h2 id="Getting-started"><a href="#Getting-started" class="headerlink" title="Getting started"></a>Getting started</h2><p>参考 <a target="_blank" rel="noopener" href="http://klee.github.io/getting-started/">KLEE官方文档</a>，选择 Build from source against LLVM 11</p>
+<p><a href="#KLEE%E4%BB%8B%E7%BB%8D">KLEE 介绍</a></p>
+<p><a href="#Getting_started">KLEE 安装</a></p>
+<p><a href="#KLEE_%E6%95%99%E7%A8%8B">KLEE 教程</a></p>
+<h2 id="KLEE介绍"><a href="#KLEE介绍" class="headerlink" title="KLEE介绍"></a>KLEE介绍</h2><h2 id="Getting-started"><a href="#Getting-started" class="headerlink" title="Getting started"></a>Getting started</h2><p>参考 <a target="_blank" rel="noopener" href="http://klee.github.io/getting-started/">KLEE官方文档</a>，选择 Build from source against LLVM 11</p>
 <p><strong>Step1: Install dependencies</strong></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install build-essential cmake curl file g++-multilib gcc-multilib git libcap-dev libgoogle-perftools-dev libncurses5-dev libsqlite3-dev libtcmalloc-minimal4 python3-pip unzip graphviz doxygen</span><br></pre></td></tr></table></figure>
 <p>其它：lit &#x3D;&gt; 实现测试，tabulate &#x3D;&gt; klee-stats 和 wllvm 的额外功能，使其更容易将程序编译为LLVM bitcode</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo pip3 install lit wllvm</span><br><span class="line">sudo apt-get install python3-tabulate</span><br></pre></td></tr></table></figure>
 <p><strong>Step2: Install LLVM 11</strong><br>Ubuntu 18.04似乎没有办法直接apt-get install llvm11，需要通过llvm docs <a target="_blank" rel="noopener" href="https://llvm.org/docs/GettingStarted.html#getting-started-with-llvm">Getting Started with the LLVM System</a><br>（后续：在klee&#x2F;build make的时候好像又可以了，详见step5）</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/llvm/llvm-project.git</span><br><span class="line"><span class="built_in">cd</span> llvm-project</span><br><span class="line"><span class="comment"># 注意版本！！</span></span><br><span class="line">git checkout release/11.x</span><br><span class="line"><span class="built_in">mkdir</span> build</span><br><span class="line"><span class="built_in">cd</span> build</span><br><span class="line"><span class="comment"># 注意这一步可能需要安装较新版本的 cmake</span></span><br><span class="line">cmake -DLLVM_ENABLE_PROJECTS=clang -DCMAKE_BUILD_TYPE=Release -G <span class="string">&quot;Unix Makefiles&quot;</span> ../llvm</span><br><span class="line">make</span><br><span class="line"><span class="comment"># make 之后还是没有clang命令，据说是要把llvm/build/bin加到path里面</span></span><br><span class="line">make install    <span class="comment"># 查了网上的解决方法，成功了</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/llvm/llvm-project.git</span><br><span class="line"><span class="built_in">cd</span> llvm-project</span><br><span class="line"><span class="comment"># 注意版本！！</span></span><br><span class="line">git checkout release/11.x</span><br><span class="line"><span class="built_in">mkdir</span> build</span><br><span class="line"><span class="built_in">cd</span> build</span><br><span class="line"><span class="comment"># 注意这一步可能需要安装较新版本的 cmake</span></span><br><span class="line">cmake -DLLVM_ENABLE_PROJECTS=clang -DCMAKE_BUILD_TYPE=Release -G <span class="string">&quot;Unix Makefiles&quot;</span> ../llvm</span><br><span class="line">make</span><br><span class="line"><span class="comment"># make 之后还是没有clang命令，据说是要把llvm/build/bin加到path里面</span></span><br><span class="line">sudo make install    <span class="comment"># 查了网上的解决方法，成功了</span></span><br></pre></td></tr></table></figure>
 <p>cmake 安装</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用安装命令</span></span><br><span class="line">sudo apt install cmake</span><br><span class="line"><span class="comment"># 可能得到的不是最新版本的 cmake，需要卸载</span></span><br><span class="line">sudo apt-get remove cmake</span><br><span class="line"></span><br><span class="line"><span class="comment"># 从cmake官网下载源码，解压文件</span></span><br><span class="line">tar -zxv -f cmake-3.xx.x.tar.gz</span><br><span class="line"><span class="comment"># 进入解压后的 cmake 文件夹</span></span><br><span class="line">./bootstrap</span><br><span class="line">make    <span class="comment"># 编译</span></span><br><span class="line">sudo make install   <span class="comment"># 安装</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 验证</span></span><br><span class="line">cmake --version</span><br></pre></td></tr></table></figure>
 
@@ -198,7 +201,7 @@
 </ul>
 </li>
 <li>Build uClibc and the POSIX environment model<ul>
-<li>默认来说，Klee 仅仅对不使用任何外部代码的程序（如 C 库函数）进行分析。如果需要使用 Klee 来运行实际的程序，则需要启用构建在 uClibc C库之上的 KLEE POSIX 运行环境。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/klee/klee-uclibc.git  </span><br><span class="line">cd klee-uclibc</span><br><span class="line">gedit ./configure</span><br><span class="line"># 修改configure中的第354行代码，将其中getAbsPathForToolInPathEnv函数的实参llvm-config修改为llvm-config-9。</span><br><span class="line">./configure --make-llvm-lib  </span><br><span class="line">make -j2</span><br><span class="line">cd ..</span><br></pre></td></tr></table></figure></li>
+<li>默认来说，Klee 仅仅对不使用任何外部代码的程序（如 C 库函数）进行分析。如果需要使用 Klee 来运行实际的程序，则需要启用构建在 uClibc C库之上的 KLEE POSIX 运行环境。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/klee/klee-uclibc.git  </span><br><span class="line"><span class="built_in">cd</span> klee-uclibc</span><br><span class="line">gedit ./configure</span><br><span class="line"><span class="comment"># 修改configure中的第354行代码，将其中getAbsPathForToolInPathEnv函数的实参llvm-config修改为llvm-config-9。</span></span><br><span class="line">./configure --make-llvm-lib  </span><br><span class="line">make -j2</span><br><span class="line"><span class="built_in">cd</span> ..</span><br></pre></td></tr></table></figure></li>
 </ul>
 </li>
 </ul>
@@ -209,12 +212,70 @@
 <p>为了支持C++代码的运行，需要打开对C++标准库的支持。</p>
 <p>在klee文件夹下运行</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LLVM_VERSION=11 BASE=&lt;LIBCXX_DIR&gt; ./scripts/build/build.sh libcxx</span><br></pre></td></tr></table></figure>
-<p>第一遍error，啥也没改又运行了一遍好像成功了</p>
-<p>网上有说法 <LIBCXX_DIR> 是step3.5中uclibc的绝对路径，但是我只是随便新建文件夹……</p>
+<p>第一遍error，什么都没改又运行了一遍好像成功了</p>
+<p>网上有说法 <LIBCXX_DIR> 是step3.5中uclibc的绝对路径，我是随便新建文件夹……</p>
 <p><strong>Step5: Configure &amp; Build KLEE</strong></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> build</span><br><span class="line"><span class="built_in">cd</span> build</span><br><span class="line">cmake \</span><br><span class="line">    -DENABLE_SOLVER_STP=ON \</span><br><span class="line">    -DENABLE_POSIX_RUNTIME=ON \</span><br><span class="line">    -DENABLE_KLEE_UCLIBC=ON	\</span><br><span class="line">    -DKLEE_UCLIBC_PATH=/home/tyn/klee-uclibc \</span><br><span class="line">    -DENABLE_UNIT_TESTS=OFF \</span><br><span class="line">    -DLLVM_CONFIG_BINARY=/usr/bin/llvm-config-11 \</span><br><span class="line">    -DENABLE_KLEE_LIBCXX=ON \</span><br><span class="line">    -DKLEE_LIBCXX_DIR=/home/tyn/klee_cxxenv/libc++-install-110/ \</span><br><span class="line">    -DKLEE_LIBCXX_INCLUDE_DIR=/home/tyn/klee_cxxenv/libc++-install-110/include/c++/v1/ \</span><br><span class="line">    -DENABLE_KLEE_EH_CXX=ON \</span><br><span class="line">    -DKLEE_LIBCXXABI_SRC_DIR=/home/tyn/klee_cxxenv/llvm-110/libcxxabi/ ..</span><br><span class="line"></span><br><span class="line"><span class="comment"># 这个时候报了一个错（llvm的一个.a文件没有找到），原因是未安装llvm-staic，然后尝试了一下</span></span><br><span class="line">sudo apt-get install clang-11 llvm-11 llvm-11-dev llvm-11-tools</span><br><span class="line"><span class="comment"># 居然好了，再运行cmake，然后make</span></span><br><span class="line"></span><br><span class="line">make</span><br></pre></td></tr></table></figure>
 <p>KLEE build完成</p>
-<h2 id=""><a href="#" class="headerlink" title=""></a></h2>
+<h2 id="KLEE-教程"><a href="#KLEE-教程" class="headerlink" title="KLEE 教程"></a>KLEE 教程</h2><h3 id="基础流程"><a href="#基础流程" class="headerlink" title="基础流程"></a>基础流程</h3><ol>
+<li><p><strong>Marking input as symbolic</strong> 将输入符号化</p>
+<p>使用 klee_make_sybolic（KLEE自带的函数），用来产生符号化的输入</p>
+<p>包括变量的地址、变量的大小、变量的名字（it can be anything）</p>
+</li>
+<li><p><strong>Compiling to LLVM bitcode</strong></p>
+<p>KLEE是在LLVM字节码上进行工作，所以我们首先需要将.c编译为LLVM字节码</p>
+</li>
+<li><p><strong>Running KLEE</strong></p>
+<p>KLEE 会为每个探索的路径生成一个测试用例。对于较大的程序，由于时间或内存限制，KLEE 可能无法探索每条路径。在这种情况下，它会告知我们中断（部分完成）路径的数量。</p>
+<p>每执行一次 <code>klee xxx.bc</code> 都会产生一个 klee-out-N 文件夹（对应klee-last）使用 <code>--only-output-states-covering-new</code> 选项，就只会生成产生新状态的测试样例（防止生成测试样例过多）</p>
+<p>可检查的错误类型主要包含以下这几类：</p>
+<ul>
+<li>ptr：存储或加载非法内存位置</li>
+<li>free：double 或者非法的 free（）</li>
+<li>abort：程序调用了abort（）</li>
+<li>assert：断言失败的情况</li>
+<li>div：除0错误</li>
+<li>user：输入有关</li>
+<li>exec：产生了一个问题让KLEE不能执行程序，比如一个未知的指令或者一个非法函数指针的调用，或者嵌入汇编。</li>
+<li>model：KLEE不能保证很高的准确性，而且只探索程序部分的状态。例如，不支持malloc的大小的那个参数的符号化。</li>
+</ul>
+<p>KLEE生成文件</p>
+<ul>
+<li><p><strong>info</strong>: This is a text file containing various information related to a KLEE run. In particular, it records the exact command-line with which KLEE was run, and the total time taken by the execution.</p>
+<p> 可以 <code>cat info</code> 查看</p>
+</li>
+<li><p><strong>warnings.txt</strong>: This is a text file containing all warnings emitted by KLEE.</p>
+</li>
+<li><p><strong>messages.txt</strong>: This is a text file containing all other messages emitted by KLEE.</p>
+</li>
+<li><p><strong>assembly.ll</strong>: This file contains a human readable version of the LLVM bitcode executed by KLEE</p>
+</li>
+<li><p><strong>run.stats</strong>: This is a text file containing various statistics emitted by KLEE. While this file can be inspected manually, you should use the klee-stats tool for that.</p>
+</li>
+<li><p><strong>run.istats</strong>: This is a binary file containing global statistics emitted by KLEE for each line of code in the program.</p>
+</li>
+</ul>
+</li>
+<li><p><strong>KLEE-generated test cases</strong></p>
+<p>KLEE 生成的测试用例被写入带有.ktest扩展名的文件中，是可以使用ktest-tool读取的二进制文件，如 <code>ktest-tool klee-last/test000001.ktest</code></p>
+<p>会显示：</p>
+<ul>
+<li>程序唤起的参数</li>
+<li>路径上的符号化变量数目</li>
+<li>符号化变量的名字及size</li>
+<li>具体的测试样例的输入值</li>
+</ul>
+</li>
+<li><p><strong>Replaying a test case</strong></p>
+</li>
+</ol>
+<h3 id="Using-Symbolic-Environment"><a href="#Using-Symbolic-Environment" class="headerlink" title="Using Symbolic Environment"></a>Using Symbolic Environment</h3><p>包括 -sym-arg和-sym-files</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># provides a command-line argument of length N to the program under test</span></span><br><span class="line">-sym-arg &lt;N&gt;</span><br><span class="line"><span class="comment"># provides at least MIN arguments and at most MAX symbolic arguments, each with maximum length N</span></span><br><span class="line">-sym-arg &lt;MIN&gt; &lt;MAX&gt; &lt;N&gt;</span><br></pre></td></tr></table></figure>
+<p>-sim-files<br>创建 NUM 个符号文件，其中第一个文件命名为“A”，第二个文件命名为“B”，依此类推，每个文件的大小为 N</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-sym-files &lt;NUM&gt; &lt;N&gt;</span><br></pre></td></tr></table></figure>
+<p>-sym-stdin和-sym-stdout分别使标准输入和输出符号化，如 <code>-sym-stdin 10</code></p>
+<h3 id="symbolic-execution-tutorial"><a href="#symbolic-execution-tutorial" class="headerlink" title="symbolic execution tutorial"></a>symbolic execution tutorial</h3><p> From <a target="_blank" rel="noopener" href="https://adalogics.com/blog/symbolic-execution-with-klee">Symbolic execution with KLEE: From installation and introduction to bug-finding in open source software.</a></p>
+
       
 
       
@@ -301,18 +362,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2022/06/22/Security-background/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2022/06/29/LibOS-%E4%B8%8E-Linux-kernel/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Security background
+          LibOS 与 Linux kernel
         
       </div>
     </a>
   
   
-    <a href="/2022/06/15/%E5%85%A8%E6%96%B0%E7%9A%84ubuntu18.04/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">全新的 ubuntu 18.04</div>
+    <a href="/2022/06/21/Security-background/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Security Q&amp;A</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -339,7 +400,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Getting-started"><span class="toc-number">1.</span> <span class="toc-text">Getting started</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text"></span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#KLEE%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">KLEE介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Getting-started"><span class="toc-number">2.</span> <span class="toc-text">Getting started</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#KLEE-%E6%95%99%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">KLEE 教程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E6%B5%81%E7%A8%8B"><span class="toc-number">3.1.</span> <span class="toc-text">基础流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Using-Symbolic-Environment"><span class="toc-number">3.2.</span> <span class="toc-text">Using Symbolic Environment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#symbolic-execution-tutorial"><span class="toc-number">3.3.</span> <span class="toc-text">symbolic execution tutorial</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
