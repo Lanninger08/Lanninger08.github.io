@@ -6,16 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Taro Puree&#39;s BLOG</title>
+  <title>Use KLEE with Rust Programs | Taro Puree&#39;s BLOG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Another me">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Taro Puree&#39;s BLOG">
-<meta property="og:url" content="http://example.com/index.html">
+  <meta name="description" content="Rust KLEE">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Use KLEE with Rust Programs">
+<meta property="og:url" content="http://example.com/2022/07/06/Use-KLEE-with-Rust-Programs/index.html">
 <meta property="og:site_name" content="Taro Puree&#39;s BLOG">
-<meta property="og:description" content="Another me">
+<meta property="og:description" content="Rust KLEE">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-07-06T13:21:56.000Z">
+<meta property="article:modified_time" content="2022-07-12T11:03:44.950Z">
 <meta property="article:author" content="Lanninger">
+<meta property="article:tag" content="security">
+<meta property="article:tag" content="KLEE">
+<meta property="article:tag" content="tutorial">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="Taro Puree&#39;s BLOG" type="application/atom+xml">
@@ -148,94 +153,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-Rust-FFI-编程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-Use-KLEE-with-Rust-Programs" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/07/11/Rust-FFI-%E7%BC%96%E7%A8%8B/">Rust FFI 编程</a>
-    </h1>
-  
-
-        
-        <a href="/2022/07/11/Rust-FFI-%E7%BC%96%E7%A8%8B/" class="archive-article-date">
-  	<time datetime="2022-07-11T13:07:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-07-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>FFI（Foreign_function_interface）是用一种编程语言写的程序能调用另一种编程语言写的函数</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">security</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">tutorial</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2022/07/11/Rust-FFI-%E7%BC%96%E7%A8%8B/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Use-KLEE-with-Rust-Programs" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/07/06/Use-KLEE-with-Rust-Programs/">Use KLEE with Rust Programs</a>
+    <h1 class="article-title" itemprop="name">
+      Use KLEE with Rust Programs
     </h1>
   
 
@@ -249,7 +174,61 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>Rust KLEE</p>
-        
+<span id="more"></span>
+<p>Rust可以通过编译得到llvm bitcode，因此理论上可以用klee分析</p>
+<h2 id="Rust-安装"><a href="#Rust-安装" class="headerlink" title="Rust 安装"></a>Rust 安装</h2><p>参考<a target="_blank" rel="noopener" href="https://www.rust-lang.org/learn/get-started">官方文档</a>，使用以下命令安装rustup</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl --proto &#x27;=https&#x27; --tlsv1.2 -sSf https://sh.rustup.rs | sh</span><br></pre></td></tr></table></figure>
+<p>可以选择default安装，之后运行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source $HOME/.cargo/env</span><br></pre></td></tr></table></figure>
+
+<p>安装指定版本（因为KLEE和Rust的LLVM版本必须一致）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rustup install 1.51.0</span><br></pre></td></tr></table></figure>
+<p>切换到某一个版本（1.51.0也使用了 LLVM 11）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rustup default 1.51.0</span><br></pre></td></tr></table></figure>
+
+<h2 id="Rust-Verification-Tools"><a href="#Rust-Verification-Tools" class="headerlink" title="Rust Verification Tools"></a>Rust Verification Tools</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://project-oak.github.io/rust-verification-tools/about.html">rust-verification-tools</a> overview<ul>
+<li>静态程序验证 - KLEE symbolic execution engine</li>
+<li>动态程序验证 - proptest fuzzing&#x2F;property testing library</li>
+<li><a target="_blank" rel="noopener" href="https://srg.doc.ic.ac.uk/klee21/talks/Reid-KLEE-Rust.pdf">2021 KLEE workshop</a><ul>
+<li>有很多依赖关系，所以工具使用docker</li>
+<li>仿照 KLEE C API 写 Rust API</li>
+<li>rust programs 通常会用到很多library</li>
+<li>主要工作<ul>
+<li>Extend KLEE</li>
+<li>LLVM preprocessor</li>
+<li>Write library</li>
+<li>Rustc flags(compiler flags)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Using KLEE on Rust-for-Linux<ul>
+<li>four types of property to verify: safety checks; invariants; parameterized checks; and functional correctness.</li>
+<li>通过使用 WLLVM 编译 Linux 内核来生成 LLVM 位码文件。</li>
+<li>KBUILD_RUSTCFLAGS通过在 Makefile 中添加一个标志来为 Rust for Linux 代码生成 LLVM 位码文件。</li>
+<li>编写一个模拟 Linux 库来代替“rLinux”函数。</li>
+<li>链接给定 Rust 内核模块的位码文件</li>
+<li>具体执行KLEE中的代码。</li>
+</ul>
+</li>
+</ul>
+<h2 id="Rust-KLEE"><a href="#Rust-KLEE" class="headerlink" title="Rust KLEE"></a>Rust KLEE</h2><ul>
+<li>KLEE 通过 C API，可以在运行时将一块内存标记为符号</li>
+<li>如果要在rust中将值标记为符号，需要做binding（使用rust FFI）。FFI允许开发人员在代码库外使用其他语言编写的函数，这些函数之后会与project链接）<ul>
+<li>binding的含义：In programming and software design, binding is an application programming interface (API) that provides glue code specifically made to allow a programming language to use a foreign library or operating system service (one that is not native to that language). –Wiki（简单来讲就是，使一种语言能够使用别的稍加修改的库。）</li>
+</ul>
+</li>
+<li>解决 KLEE 的 Undefined references 问题：使用<code>llvm-link-11</code>将bitcode文件（将所有的rust代码都编译为了bc）链接在一起</li>
+<li></li>
+</ul>
+<h2 id="具体操作"><a href="#具体操作" class="headerlink" title="具体操作"></a>具体操作</h2><ol>
+<li>将.rs编译为llvm bitcode <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rustc --emit=llvm-bc hello.rs</span><br></pre></td></tr></table></figure></li>
+<li>使用klee分析.bc</li>
+</ol>
+
       
 
       
@@ -279,16 +258,84 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2022/07/06/Use-KLEE-with-Rust-Programs/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2022/07/06/Use-KLEE-with-Rust-Programs/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2022/07/11/Rust-FFI-%E7%BC%96%E7%A8%8B/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Rust FFI 编程
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/06/29/LibOS-%E4%B8%8E-Linux-kernel/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">LibOS 与 Linux kernel</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -303,391 +350,32 @@
         </div>
         
         
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-LibOS-与-Linux-kernel" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/06/29/LibOS-%E4%B8%8E-Linux-kernel/">LibOS 与 Linux kernel</a>
-    </h1>
-  
-
-        
-        <a href="/2022/06/29/LibOS-%E4%B8%8E-Linux-kernel/" class="archive-article-date">
-  	<time datetime="2022-06-29T09:39:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-06-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>…</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">security</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2022/06/29/LibOS-%E4%B8%8E-Linux-kernel/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Rust-%E5%AE%89%E8%A3%85"><span class="toc-number">1.</span> <span class="toc-text">Rust 安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rust-Verification-Tools"><span class="toc-number">2.</span> <span class="toc-text">Rust Verification Tools</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rust-KLEE"><span class="toc-number">3.</span> <span class="toc-text">Rust KLEE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E6%93%8D%E4%BD%9C"><span class="toc-number">4.</span> <span class="toc-text">具体操作</span></a></li></ol>
+                    </div>
+                </span>
             </div>
         </div>
         
-        
     </div>
 </aside>
 
 
 
-
   
-    <article id="post-KLEE" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/06/22/KLEE/">KLEE安装&amp;基础</a>
-    </h1>
   
 
-        
-        <a href="/2022/06/22/KLEE/" class="archive-article-date">
-  	<time datetime="2022-06-22T06:28:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-06-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>On Ubuntu 18.04</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">security</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">KLEE</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">tutorial</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2022/06/22/KLEE/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Security-background" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/06/21/Security-background/">Security Q&amp;A</a>
-    </h1>
   
 
-        
-        <a href="/2022/06/21/Security-background/" class="archive-article-date">
-  	<time datetime="2022-06-21T06:35:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-06-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>搬砖小知识</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">security</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2022/06/21/Security-background/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-全新的ubuntu18.04" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/06/15/%E5%85%A8%E6%96%B0%E7%9A%84ubuntu18.04/">全新的 ubuntu 18.04</a>
-    </h1>
   
 
-        
-        <a href="/2022/06/15/%E5%85%A8%E6%96%B0%E7%9A%84ubuntu18.04/" class="archive-article-date">
-  	<time datetime="2022-06-15T06:20:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-06-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>必要的工具</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">others</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2022/06/15/%E5%85%A8%E6%96%B0%E7%9A%84ubuntu18.04/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-奇葩说第七季" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/06/14/%E5%A5%87%E8%91%A9%E8%AF%B4%E7%AC%AC%E4%B8%83%E5%AD%A3/">奇葩说第七季</a>
-    </h1>
-  
-
-        
-        <a href="/2022/06/14/%E5%A5%87%E8%91%A9%E8%AF%B4%E7%AC%AC%E4%B8%83%E5%AD%A3/" class="archive-article-date">
-  	<time datetime="2022-06-14T06:26:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-06-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>一些很喜欢的观点～</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">daily</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2022/06/14/%E5%A5%87%E8%91%A9%E8%AF%B4%E7%AC%AC%E4%B8%83%E5%AD%A3/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
 
 
@@ -714,8 +402,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
