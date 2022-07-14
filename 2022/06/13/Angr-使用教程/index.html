@@ -15,13 +15,13 @@
 <meta property="og:site_name" content="Taro Puree&#39;s BLOG">
 <meta property="og:description" content="用了快一年的angr功能整理">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/pics/loop-1.png">
-<meta property="og:image" content="http://example.com/2022/06/13/Angr-%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/pics/taint-1.png">
+<meta property="og:image" content="http://example.com/pics/angr-loop-1.png">
+<meta property="og:image" content="http://example.com/2022/06/13/pics/angr-taint-1.png">
 <meta property="article:published_time" content="2022-06-13T07:50:36.000Z">
-<meta property="article:modified_time" content="2022-07-14T08:05:40.770Z">
+<meta property="article:modified_time" content="2022-07-14T08:34:20.778Z">
 <meta property="article:author" content="Lanninger">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/pics/loop-1.png">
+<meta name="twitter:image" content="http://example.com/pics/angr-loop-1.png">
   
     <link rel="alternative" href="/atom.xml" title="Taro Puree&#39;s BLOG" type="application/atom+xml">
   
@@ -177,13 +177,13 @@
 <span id="more"></span>
 <h1 id="Binary-Analysis"><a href="#Binary-Analysis" class="headerlink" title="Binary-Analysis"></a>Binary-Analysis</h1><p>Binary analysis based on angr</p>
 <ul>
-<li>Load binary</li>
-<li>Breakpoint</li>
-<li>Hook</li>
-<li>Symbolic execution</li>
-<li>Static Analysis(VSA &amp; call gragh)</li>
-<li>Loop</li>
-<li>Taint Analysis</li>
+<li><a href="#1">Load binary</a></li>
+<li><a href="#2">Breakpoint</a></li>
+<li><a href="#3">Hook</a></li>
+<li><a href="#4">Symbolic execution</a></li>
+<li><a href="#5">Static Analysis(VSA &amp; call gragh)</a></li>
+<li><a href="#6">Loop</a></li>
+<li><a href="#7">Taint Analysis</a></li>
 </ul>
 <p>Other tips</p>
 <ul>
@@ -191,7 +191,7 @@
 <li>可以通过 angr的文档 &#x2F; GitHub issues 找到有用信息</li>
 <li>可以在 slack 提问或查找聊天记录</li>
 </ul>
-<h2 id="Load-binary"><a href="#Load-binary" class="headerlink" title="Load binary"></a>Load binary</h2><p>个人最常用的加载二进制的选项</p>
+<h2 id="Load-binary"><a href="#Load-binary" class="headerlink" title="Load binary"></a><div id="1">Load binary<div></h2><p>个人最常用的加载二进制的选项</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">p = angr.Project(<span class="string">&quot;ecdsa&quot;</span>, </span><br><span class="line">									load_options=&#123; <span class="string">&quot;auto_load_libs&quot;</span>:<span class="literal">False</span>, </span><br><span class="line">                                 <span class="string">&#x27;main_opts&#x27;</span> : &#123;<span class="string">&#x27;base_addr&#x27;</span> : <span class="number">0x0</span>&#125;</span><br><span class="line">                                &#125;)</span><br></pre></td></tr></table></figure>
 
 <p><code>auto_load_libs</code> 设置是否自动载入依赖的库，默认为True</p>
@@ -211,7 +211,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cfg = proj.analyses.CFGFast()</span><br><span class="line">target_func = cfg.kb.functions[<span class="string">&#x27;test_func&#x27;</span>]</span><br><span class="line">block = p.factory.block(<span class="built_in">max</span>(target_func.block_addrs_set))</span><br><span class="line"><span class="built_in">print</span>(block.pp())  <span class="comment">#打印出汇编指令</span></span><br><span class="line"><span class="built_in">print</span>(block.instruction_addrs[-<span class="number">1</span>])  <span class="comment">#打印出每条指令的地址</span></span><br></pre></td></tr></table></figure>
 
 
-<h2 id="Breakpoint"><a href="#Breakpoint" class="headerlink" title="Breakpoint"></a>Breakpoint</h2><p>用于监测一些行为（如内存读写）</p>
+<h2 id="Breakpoint"><a href="#Breakpoint" class="headerlink" title="Breakpoint"></a><div id="2">Breakpoint<div></h2><p>用于监测一些行为（如内存读写）</p>
 <p>需要有一个状态 state</p>
 <p>插入breakpoint用 state.inspect.b，需要写一个action对应的function</p>
 <p><a target="_blank" rel="noopener" href="https://docs.angr.io/core-concepts/simulation#breakpoints">https://docs.angr.io/core-concepts/simulation#breakpoints</a></p>
@@ -219,12 +219,12 @@
 <p>另外，如果不想让angr的<code>mem_read</code>影响断点，需要在<code>state.memory.load</code> 的时候 用<code>disable_actions=True</code>和<code>inspect=False</code></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> angr</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">track</span>():</span><br><span class="line">	<span class="comment"># 载入二进制文件</span></span><br><span class="line">	b = angr.Project(<span class="string">&#x27;change&#x27;</span>)</span><br><span class="line">	<span class="comment"># 获取状态</span></span><br><span class="line">	s = b.factory.entry_state()</span><br><span class="line"></span><br><span class="line">	<span class="keyword">def</span> <span class="title function_">track_write_mem</span>(<span class="params">state</span>):</span><br><span class="line">		<span class="keyword">if</span> state.inspect.instruction:</span><br><span class="line">			<span class="comment"># 可以在这里加上instruction的地址判断限制范围</span></span><br><span class="line">			<span class="built_in">print</span>(<span class="string">&#x27;&#123;:x&#125; [&#123;&#125;] = &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(state.inspect.instruction,</span><br><span class="line">								   state.inspect.mem_write_address,</span><br><span class="line">								   state.inspect.mem_write_expr))</span><br><span class="line"></span><br><span class="line">	<span class="keyword">def</span> <span class="title function_">track_instr</span>(<span class="params">state</span>):</span><br><span class="line">		<span class="comment"># print(&#x27;instruction: &#x27;, state.inspect.instruction)</span></span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">def</span> <span class="title function_">track_func</span>(<span class="params">state</span>):</span><br><span class="line">		<span class="built_in">print</span>(<span class="string">&#x27;function: &#x27;</span>, state.inspect.function_address)</span><br><span class="line"></span><br><span class="line">	<span class="comment"># 不加instruction的断点后续就显示不了instruction，action给了一个空函数</span></span><br><span class="line">	s.inspect.b(<span class="string">&#x27;instruction&#x27;</span>, action=track_instr)</span><br><span class="line"></span><br><span class="line">	<span class="comment"># 事件：内存被写入</span></span><br><span class="line">	s.inspect.b(<span class="string">&#x27;mem_write&#x27;</span>, when=angr.BP_AFTER, action=track_write_mem)</span><br><span class="line"></span><br><span class="line">	<span class="comment"># 事件：call指令（函数调用）</span></span><br><span class="line">	s.inspect.b(<span class="string">&#x27;call&#x27;</span>, action=track_func)</span><br><span class="line"></span><br><span class="line">	sm = b.factory.simulation_manager(s)</span><br><span class="line">	<span class="comment"># 执行到没有状态可以继续执行</span></span><br><span class="line">	<span class="built_in">print</span>(sm.run())</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">	track()</span><br></pre></td></tr></table></figure>
 
-<h2 id="Hook"><a href="#Hook" class="headerlink" title="Hook"></a>Hook</h2><p>hooking 机制，用于将共享库中的代码替换为其他的操作，通常只是hook掉不支持的指令。使用函数 <code>proj.hook(addr, hook)</code> 和 <code>proj.hook_symbol(name, hook)</code> 来做到这一点，其中 <code>hook</code> 是一个 SimProcedure 的实例。通过 <code>.is_hooked</code>、<code>.unhook</code> 和 <code>.hooked_by</code> 来进行管理</p>
+<h2 id="Hook"><a href="#Hook" class="headerlink" title="Hook"></a><div id="3">Hook<div></h2><p>hooking 机制，用于将共享库中的代码替换为其他的操作，通常只是hook掉不支持的指令。使用函数 <code>proj.hook(addr, hook)</code> 和 <code>proj.hook_symbol(name, hook)</code> 来做到这一点，其中 <code>hook</code> 是一个 SimProcedure 的实例。通过 <code>.is_hooked</code>、<code>.unhook</code> 和 <code>.hooked_by</code> 来进行管理</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">passf</span>(<span class="params">state</span>):</span><br><span class="line">		<span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">proj.hook(addr, passf)</span><br></pre></td></tr></table></figure>
 
 
 
-<h2 id="Symbolic-execution"><a href="#Symbolic-execution" class="headerlink" title="Symbolic execution"></a>Symbolic execution</h2><h3 id="Key-Concepts"><a href="#Key-Concepts" class="headerlink" title="Key Concepts"></a>Key Concepts</h3><p><strong>State</strong></p>
+<h2 id="Symbolic-execution"><a href="#Symbolic-execution" class="headerlink" title="Symbolic execution"></a><div id="4">Symbolic execution<div></h2><h3 id="Key-Concepts"><a href="#Key-Concepts" class="headerlink" title="Key Concepts"></a>Key Concepts</h3><p><strong>State</strong></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建 state 对象</span></span><br><span class="line">.blank_state()	<span class="comment"># 返回一个几乎没有初始化的 state 对象，当访问未初始化的数据时，将返回一个没有约束条件的符号值。</span></span><br><span class="line">.entry_state()	<span class="comment"># 从主对象文件的入口点创建一个 state。</span></span><br><span class="line">.full_init_state()	<span class="comment"># 与 entry_state() 类似，但执行不是从入口点开始，而是从一个特殊的 SimProcedure 开始，在执行到入口点之前调用必要的初始化函数。</span></span><br><span class="line">.call_state()		<span class="comment"># 创建一个准备执行给定函数的 state。</span></span><br></pre></td></tr></table></figure>
 
 <ul>
@@ -256,7 +256,7 @@
 <li>MemLimiter: stop DSE when memory consumption hits critical levels</li>
 <li>ExplosionDetector: (1) trigger a timeout, (2) stop the execution when reaching a certain amount of generated <code>SimState</code>(s), and (3) nuking all the unconstrained <code>SimState</code>(s) in a <code>SimulationManager</code>.</li>
 </ul>
-<h2 id="Static-Analysis-VSA-amp-call-gragh"><a href="#Static-Analysis-VSA-amp-call-gragh" class="headerlink" title="Static Analysis(VSA &amp; call gragh)"></a>Static Analysis(VSA &amp; call gragh)</h2><h3 id="VSA"><a href="#VSA" class="headerlink" title="VSA"></a>VSA</h3><p>Angr 的 VSA 似乎有点问题（待进一步验证）</p>
+<h2 id="Static-Analysis-VSA-amp-call-gragh"><a href="#Static-Analysis-VSA-amp-call-gragh" class="headerlink" title="Static Analysis(VSA &amp; call gragh)"></a><div id="5">Static Analysis(VSA &amp; call gragh)<div></h2><h3 id="VSA"><a href="#VSA" class="headerlink" title="VSA"></a>VSA</h3><p>Angr 的 VSA 似乎有点问题（待进一步验证）</p>
 <p>Angr提供的main interface 是 Value Flow Graph</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 首先生成vfg</span></span><br><span class="line">proj = angr.Project(path, use_sim_procedures=<span class="literal">True</span>, default_analysis_mode=<span class="string">&#x27;symbolic&#x27;</span>) </span><br><span class="line"><span class="comment"># Project参数大概都是default值</span></span><br><span class="line">cfg = proj.analyses.CFGEmulated(context_sensitivity_level=<span class="number">1</span>)</span><br><span class="line">vfg = proj.analyses.VFG(cfg, function_start=function_start, context_sensitivity_level=<span class="number">2</span>, </span><br><span class="line">      interfunction_level=<span class="number">4</span>, remove_options=&#123; angr.options.OPTIMIZE_IR &#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 说明这个函数出现在了final state</span></span><br><span class="line">func.addr <span class="keyword">in</span> vfg.function_final_states </span><br><span class="line"></span><br><span class="line">function_final_states = vfg.function_final_states</span><br><span class="line">fun_final_states = function_final_states[fun_fun.addr]</span><br><span class="line">fun_final_state = <span class="built_in">next</span>(<span class="built_in">iter</span>(fun_final_states.values())) <span class="comment">#取出dictionary的值</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 打印出函数所有可能的返回值</span></span><br><span class="line"><span class="built_in">print</span>(fun_final_state.solver.eval_upto(fun_final_state.regs.rax, <span class="number">8</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 记录被执行几次</span></span><br><span class="line">vfg._execution_counter[<span class="number">0x4007b3</span>]</span><br></pre></td></tr></table></figure>
 
@@ -282,7 +282,7 @@
 
 
 
-<h2 id="Loop"><a href="#Loop" class="headerlink" title="Loop"></a>Loop</h2><h3 id="Definition"><a href="#Definition" class="headerlink" title="Definition"></a>Definition</h3><p><strong>Dominators</strong>: Node d dominates node n in a graph (d dom n) if every path from the start node to n goes through d</p>
+<h2 id="Loop"><a href="#Loop" class="headerlink" title="Loop"></a><div id="6">Loop<div></h2><h3 id="Definition"><a href="#Definition" class="headerlink" title="Definition"></a>Definition</h3><p><strong>Dominators</strong>: Node d dominates node n in a graph (d dom n) if every path from the start node to n goes through d</p>
 <p><strong>header</strong>: Single entry-point.  A header dominates all nodes in the loop. loop header是循环的进入点，是指一个支配基本块，同时也是倒退边的目标。</p>
 <p><strong>back edge</strong>: A back edge is an arc whose head dominates its tail (back edge tail-&gt;head). A back edge must be a part of at least one loop 倒退边，指向的基本块在图的深度优先搜索中，已经走过的基本快。back edge多半表示有循环</p>
 <p><strong>natural loop</strong>: The natural loop of a back edge is the smallest set of nodes that includes the head and tail of the back edge, and has no predecessors outside the set, except for the predecessors of the header.</p>
@@ -305,7 +305,7 @@
 <p>Results:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#back_edge_trip_counts:  defaultdict(&lt;class &#x27;list&#x27;&gt;, &#123;4199056: [0], 4198767: [0], 4198817: [6], 4198917: [2], 4198905: [3, 3]&#125;)</span><br><span class="line">#header_trip_counts:  defaultdict(&lt;class &#x27;list&#x27;&gt;, &#123;4199056: [1], 4198767: [9], 4198817: [7], 4198917: [3], 4198905: [4, 4]&#125;)</span><br><span class="line"></span><br><span class="line">地址应该是header的地址（不是循环开始的地址！）</span><br><span class="line">4199056 - 0x401290 - libc_csu xxxxx（这个不太清楚是什么）</span><br><span class="line">4198767 - 0x40116f - while_loop</span><br><span class="line">4198817 - 0x4011a1 - for_loop</span><br><span class="line">4198917 - 0x401205 - nested_loop</span><br><span class="line">4198905 - 0x4011f9 - nested_loop(subloop)</span><br></pre></td></tr></table></figure>
 
-<p><img src="/./pics/loop-1.png"></p>
+<p><img src="/../pics/angr-loop-1.png"></p>
 <p><strong>back_edge_trip_counts</strong></p>
 <ul>
 <li>while_loop 的 back_edge_trip_counts 是 0 （应该还是识别出来循环了，但没有找到循环次数，cfg里没有back edge）</li>
@@ -343,7 +343,7 @@
 
 
 
-<h2 id="Taint-Analysis"><a href="#Taint-Analysis" class="headerlink" title="Taint Analysis"></a>Taint Analysis</h2><h3 id="Symbolic-Execution-Approach"><a href="#Symbolic-Execution-Approach" class="headerlink" title="Symbolic Execution Approach"></a>Symbolic Execution Approach</h3><p>使用 Annotation 对符号值进行标记，并在运算中传播（需要把eliminatable设置成false，relocatable设置成true）</p>
+<h2 id="Taint-Analysis"><a href="#Taint-Analysis" class="headerlink" title="Taint Analysis"></a><div id="7">Taint Analysis<div></h2><h3 id="Symbolic-Execution-Approach"><a href="#Symbolic-Execution-Approach" class="headerlink" title="Symbolic Execution Approach"></a>Symbolic Execution Approach</h3><p>使用 Annotation 对符号值进行标记，并在运算中传播（需要把eliminatable设置成false，relocatable设置成true）</p>
 <p>这里我自定义了一个Annotation类，可以在init的时候加上一些信息（这里我自定义了一个type 比如标注一下是secret之类的）</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># my_annotation.py</span></span><br><span class="line"><span class="keyword">from</span> claripy <span class="keyword">import</span> Annotation</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SecretAnnotation</span>(<span class="title class_ inherited__">Annotation</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, <span class="built_in">type</span></span>):</span><br><span class="line">        self.<span class="built_in">type</span> = <span class="built_in">type</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">eliminatable</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="comment"># 表示这个annotation是否可以在simplification的时候被eliminated</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">relocatable</span>(<span class="params">self</span>): </span><br><span class="line">      	<span class="comment"># 表示这个annotation是否可以在simplification的时候被relocated</span></span><br><span class="line">        <span class="comment"># 可以实现自己的relocate()方法</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br></pre></td></tr></table></figure>
 
@@ -372,7 +372,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> angr</span><br><span class="line"><span class="keyword">import</span> claripy</span><br><span class="line"><span class="keyword">from</span> angr.analyses.reaching_definitions.dep_graph <span class="keyword">import</span> DepGraph</span><br><span class="line"><span class="keyword">from</span> angr.knowledge_plugins.key_definitions.constants <span class="keyword">import</span> OP_BEFORE</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test_RD</span>(<span class="params">proj</span>):</span><br><span class="line">    cfg = proj.analyses.CFGFast()</span><br><span class="line">    target_func = cfg.kb.functions[<span class="string">&#x27;test_func&#x27;</span>]</span><br><span class="line">    <span class="comment"># observation point的格式为一个tuple，第一个元素是&#x27;insn&#x27;或&#x27;node&#x27;，第二个元素是observe的地址，第三个是OP_BEFORE/AFTER</span></span><br><span class="line">    observation_point = (<span class="string">&#x27;insn&#x27;</span>, <span class="number">4196002</span>, <span class="number">0</span>)</span><br><span class="line">    <span class="comment"># Starting the ReachingDefinition analysis</span></span><br><span class="line">    <span class="comment"># 需要提供subject（即分析的函数），observation point（如果没有，可以选择observe all，但是个人感觉之后还是要有observation point，不然没办法知道是哪个变量被定义）</span></span><br><span class="line">    rd = proj.analyses.ReachingDefinitions(subject=target_func, </span><br><span class="line">                                            <span class="comment"># func_graph=target_func.graph,</span></span><br><span class="line">                                            <span class="comment"># cc = target_func.calling_convention,</span></span><br><span class="line">                                            observation_points= [observation_point],</span><br><span class="line">                                            dep_graph=DepGraph(),</span><br><span class="line">                                            <span class="comment"># observe_all=True</span></span><br><span class="line">                                            )</span><br><span class="line"></span><br><span class="line">    <span class="comment"># rdi是函数的第一个参数</span></span><br><span class="line">    state_before_call_to_system = rd.observed_results[observation_point]</span><br><span class="line">    rdi_offset = proj.arch.registers[<span class="string">&#x27;rbp&#x27;</span>][<span class="number">0</span>]+<span class="number">8</span></span><br><span class="line">    rdi_definition = <span class="built_in">list</span>(state_before_call_to_system.register_definitions.get_objects_by_offset(rdi_offset))[<span class="number">0</span>]</span><br><span class="line">    <span class="built_in">print</span>(rdi_definition)</span><br><span class="line">    <span class="comment"># 输出结果</span></span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    &lt;Definition &#123;Atom:&lt;Reg 72&lt;8&gt;&gt;, </span></span><br><span class="line"><span class="string">    						Codeloc:&lt;0x400696 id=0x40067f[-2] contextless&gt;, </span></span><br><span class="line"><span class="string">    						Data:DataSet&lt;64&gt;: &#123;&lt;Undefined&gt;&#125;&#125;&gt;</span></span><br><span class="line"><span class="string">    0x400696指的是 rdi在observation point前最近一次被定义的位置</span></span><br><span class="line"><span class="string">    id=0x40067f[-2] id是basic block的address -2是VEX statement</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    p = angr.Project(<span class="string">&#x27;c&#x27;</span>)</span><br><span class="line">    test_RD(p)</span><br></pre></td></tr></table></figure>
 
 <p>所有register的offset</p>
-<img src="./pics/taint-1.png" style="zoom: 50%;" />
+<img src="../pics/angr-taint-1.png" style="zoom: 50%;" />
 
 <h4 id="DDG"><a href="#DDG" class="headerlink" title="DDG"></a>DDG</h4><p>API文档中这么写：DDG是由CFG分析结果直接生成的快速数据依赖图，存在的唯一原因是它的速度，对soundness or accuracy没有任何保证。You are supposed to use it only when you want to <strong>track the simplest data dependence</strong>, and you do not care about soundness or accuracy.</p>
 <p>为了得到更好的数据依赖关系图，请考虑先进行更好的静态分析（如Value-set 分析），然后在分析结果的基础上构建一个依赖图（例如angr中的VFG）（？？VSA不是也有问题嘛？）</p>
@@ -596,19 +596,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">tutorial</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">daily</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">security</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">KLEE</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">tutorial</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">daily</a>
               </li>
             
             <div class="clearfix"></div>
