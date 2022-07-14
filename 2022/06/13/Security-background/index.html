@@ -6,20 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Rust FFI 编程 | Taro Puree&#39;s BLOG</title>
+  <title>Security Q&amp;A | Taro Puree&#39;s BLOG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="FFI（Foreign_function_interface）是用一种编程语言写的程序能调用另一种编程语言写的函数">
+  <meta name="description" content="搬砖小知识">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Rust FFI 编程">
-<meta property="og:url" content="http://example.com/2022/07/11/Rust-FFI-%E7%BC%96%E7%A8%8B/index.html">
+<meta property="og:title" content="Security Q&amp;A">
+<meta property="og:url" content="http://example.com/2022/06/13/Security-background/index.html">
 <meta property="og:site_name" content="Taro Puree&#39;s BLOG">
-<meta property="og:description" content="FFI（Foreign_function_interface）是用一种编程语言写的程序能调用另一种编程语言写的函数">
+<meta property="og:description" content="搬砖小知识">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2022-07-11T13:07:35.000Z">
-<meta property="article:modified_time" content="2022-07-12T09:08:35.854Z">
+<meta property="article:published_time" content="2022-06-13T06:35:38.000Z">
+<meta property="article:modified_time" content="2022-07-13T11:55:48.304Z">
 <meta property="article:author" content="Lanninger">
 <meta property="article:tag" content="security">
-<meta property="article:tag" content="tutorial">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="Taro Puree&#39;s BLOG" type="application/atom+xml">
@@ -152,47 +151,56 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Rust-FFI-编程" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-Security-background" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Rust FFI 编程
+      Security Q&amp;A
     </h1>
   
 
         
-        <a href="/2022/07/11/Rust-FFI-%E7%BC%96%E7%A8%8B/" class="archive-article-date">
-  	<time datetime="2022-07-11T13:07:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-07-11</time>
+        <a href="/2022/06/13/Security-background/" class="archive-article-date">
+  	<time datetime="2022-06-13T06:35:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-06-13</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>FFI（Foreign_function_interface）是用一种编程语言写的程序能调用另一种编程语言写的函数</p>
+        <p>搬砖小知识</p>
 <span id="more"></span>
-<h2 id="Rust-语言层面对-FFI-的支持"><a href="#Rust-语言层面对-FFI-的支持" class="headerlink" title="Rust 语言层面对 FFI 的支持"></a>Rust 语言层面对 FFI 的支持</h2><p>Rust 语言主要在关键字和标准库两个方面对 FFI 提供了支持</p>
+<h2 id="隐私保护技术主要有哪些？"><a href="#隐私保护技术主要有哪些？" class="headerlink" title="隐私保护技术主要有哪些？"></a>隐私保护技术主要有哪些？</h2><p>常见的隐私保护方式</p>
 <ul>
-<li>关键字 <code>​extern</code><ul>
-<li>属性 <code>​​#[no_mangle]</code><ul>
-<li>用来关闭 Rust 的名称修改（name mangling）功能。</li>
-<li>Mangling 是编译器在解析名称时，修改我们定义的函数名称，增加一些用于其编译过程的额外信息。</li>
-<li>但在与其它语言交互时，如果函数名称被编译器修改，程序开发者无法知道修改后的函数名称，其它语言也无法按原名称调用。​​</li>
+<li>安全多方计算（MPC）<ul>
+<li>Multi-Party Computation</li>
+<li>为解决一组互不信任的参与方之间在保护隐私信息以及没有可信第三方的前提下协同计算问题而提出的理论框架</li>
+<li>（不泄露原始数据，但能够得到数据信息）</li>
 </ul>
 </li>
-<li>外部块​​ <code>ExternBlock</code>​​ 及其属性 ​​<code>link</code>​​ 和 ​​<code>link_name​​</code><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ffi/c-call-rust/src/lib.rs</span></span><br><span class="line"><span class="meta">#[no_mangle]</span></span><br><span class="line"><span class="meta">#[link(name = <span class="string">&quot;c_library&quot;</span>)]</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> &#123;</span><br><span class="line">    <span class="meta">#[link_name = <span class="string">&quot;c_function_name&quot;</span>]</span></span><br><span class="line">    <span class="keyword">fn</span> <span class="title function_">name_in_rust</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>联邦学习（FL）<ul>
+<li>联邦学习本质上是一种分布式机器学习技术，或机器学习框架。联邦学习的目标是在保证数据隐私安全及合法合规的基础上，实现共同建模，提升 AI 模型的效果。</li>
 </ul>
 </li>
-<li>标准库（与 C 语言交互的代码引用正确的类型）<ul>
-<li>std:os:raw​​ 模块</li>
-<li>std:ffi​​ 模块<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> std::ffi::CString;</span><br><span class="line"><span class="keyword">use</span> std::os::raw::c_char;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[no_mangle]</span></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">extern</span> <span class="title function_ invoke__">rust_printer</span>(input: *<span class="keyword">const</span> c_char) &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">hello</span> = String::<span class="title function_ invoke__">from</span>(<span class="string">&quot;Hello World!&quot;</span>);</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">c_str_to_print</span> = CString::<span class="title function_ invoke__">new</span>(hello).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id=""><a href="#" class="headerlink" title=""></a></h2></li>
+<li>可信执行环境 (TEE)<ul>
+<li>CPU上的一块区域，给数据和代码提供一个更安全的空间，并保证它们的机密性和完整性</li>
 </ul>
 </li>
 </ul>
+<h2 id="分布式"><a href="#分布式" class="headerlink" title="分布式"></a>分布式</h2><ul>
+<li>Raft 一种基于日志复制的一致性算法 一篇写的还不错的入门博客 <a target="_blank" rel="noopener" href="https://blog.csdn.net/daokoi/article/details/115462104">Raft学习总结</a></li>
+</ul>
+<h2 id="Q-程序分析怎么找论文看？"><a href="#Q-程序分析怎么找论文看？" class="headerlink" title="Q: 程序分析怎么找论文看？"></a>Q: 程序分析怎么找论文看？</h2><p>其实四大的静态分析这方面的论文不是很多，平时会关注顶会，看相关的文章；最有用的是去找相关论文的引用&#x2F;引用的引用&#x2F;被引用</p>
+<h2 id="和他们的差距"><a href="#和他们的差距" class="headerlink" title="和他们的差距"></a>和他们的差距</h2><p>以后组会没什么可分享的，就讲论文&#x2F;tutorial，讲扫盲ppt（保命小技巧）</p>
+<p>看到一个题目，邓工想的是：别人是怎么做的，我可以怎么做？</p>
+<p>我：不了解背景，先做一些调研…</p>
+<p>老板说这是一种精神洁癖，需要克服</p>
+<h2 id="需要对系统安全各领域有一定的广泛的了解-or-需要了解某一个具体方向的时候有目的性地调研"><a href="#需要对系统安全各领域有一定的广泛的了解-or-需要了解某一个具体方向的时候有目的性地调研" class="headerlink" title="需要对系统安全各领域有一定的广泛的了解 or 需要了解某一个具体方向的时候有目的性地调研"></a>需要对系统安全各领域有一定的广泛的了解 or 需要了解某一个具体方向的时候有目的性地调研</h2><p>广泛了解可以，但没必要系统性地做这件事，平时聊聊天看看pre就行。</p>
+<p>最好是了解本领域的东西，顺藤摸瓜，可以对整件事情的脉络比较了解。这样容易带着问题读论文，会轻松一些。</p>
+<p>在进行类比的时候，重点是两个东西之间的“联系”和“区别”</p>
 
       
 
@@ -207,10 +215,6 @@
 			 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">security</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">tutorial</a>
         		</li>
       		
 		</ul>
@@ -266,7 +270,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2022/07/11/Rust-FFI-%E7%BC%96%E7%A8%8B/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2022/06/13/Security-background/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -280,11 +284,15 @@
   
 <nav id="article-nav">
   
-  
-    <a href="/2022/07/06/Use-KLEE-with-Rust-Programs/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Use KLEE with Rust Programs</div>
-      <i class="icon-circle-right"></i>
+    <a href="/2022/06/14/%E5%A5%87%E8%91%A9%E8%AF%B4%E7%AC%AC%E4%B8%83%E5%AD%A3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          奇葩说第七季
+        
+      </div>
     </a>
+  
   
 </nav>
 
@@ -309,7 +317,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Rust-%E8%AF%AD%E8%A8%80%E5%B1%82%E9%9D%A2%E5%AF%B9-FFI-%E7%9A%84%E6%94%AF%E6%8C%81"><span class="toc-number">1.</span> <span class="toc-text">Rust 语言层面对 FFI 的支持</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text"></span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9A%90%E7%A7%81%E4%BF%9D%E6%8A%A4%E6%8A%80%E6%9C%AF%E4%B8%BB%E8%A6%81%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">隐私保护技术主要有哪些？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">分布式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Q-%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E6%80%8E%E4%B9%88%E6%89%BE%E8%AE%BA%E6%96%87%E7%9C%8B%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">Q: 程序分析怎么找论文看？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%92%8C%E4%BB%96%E4%BB%AC%E7%9A%84%E5%B7%AE%E8%B7%9D"><span class="toc-number">4.</span> <span class="toc-text">和他们的差距</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9C%80%E8%A6%81%E5%AF%B9%E7%B3%BB%E7%BB%9F%E5%AE%89%E5%85%A8%E5%90%84%E9%A2%86%E5%9F%9F%E6%9C%89%E4%B8%80%E5%AE%9A%E7%9A%84%E5%B9%BF%E6%B3%9B%E7%9A%84%E4%BA%86%E8%A7%A3-or-%E9%9C%80%E8%A6%81%E4%BA%86%E8%A7%A3%E6%9F%90%E4%B8%80%E4%B8%AA%E5%85%B7%E4%BD%93%E6%96%B9%E5%90%91%E7%9A%84%E6%97%B6%E5%80%99%E6%9C%89%E7%9B%AE%E7%9A%84%E6%80%A7%E5%9C%B0%E8%B0%83%E7%A0%94"><span class="toc-number">5.</span> <span class="toc-text">需要对系统安全各领域有一定的广泛的了解 or 需要了解某一个具体方向的时候有目的性地调研</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -407,10 +415,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">others</a>
-              </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">security</a>
