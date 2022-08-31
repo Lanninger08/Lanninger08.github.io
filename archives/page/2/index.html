@@ -6,19 +6,16 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Ubuntu18.04重装 | Taro Puree&#39;s BLOG</title>
+  <title>Archives | Taro Puree&#39;s BLOG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="第二次了……">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Ubuntu18.04重装">
-<meta property="og:url" content="http://example.com/2022/06/15/Ubuntu18.04%E9%87%8D%E8%A3%85/index.html">
+  <meta name="description" content="Another me">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Taro Puree&#39;s BLOG">
+<meta property="og:url" content="http://example.com/archives/page/2/index.html">
 <meta property="og:site_name" content="Taro Puree&#39;s BLOG">
-<meta property="og:description" content="第二次了……">
+<meta property="og:description" content="Another me">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2022-06-15T06:20:19.000Z">
-<meta property="article:modified_time" content="2022-07-14T06:15:04.956Z">
 <meta property="article:author" content="Lanninger">
-<meta property="article:tag" content="tutorial">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="Taro Puree&#39;s BLOG" type="application/atom+xml">
@@ -151,214 +148,63 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Ubuntu18.04重装" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      Ubuntu18.04重装
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2022" class="archive-year">2022</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2022/06/13/Security-background/" class="archive-article-date">
+  	<time datetime="2022-06-13T06:35:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-06-13</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2022/06/13/Security-background/">Security Q&amp;A</a>
     </h1>
   
 
-        
-        <a href="/2022/06/15/Ubuntu18.04%E9%87%8D%E8%A3%85/" class="archive-article-date">
-  	<time datetime="2022-06-15T06:20:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-06-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>第二次了……</p>
-<span id="more"></span>
-<h2 id="Step1-卸载与安装"><a href="#Step1-卸载与安装" class="headerlink" title="Step1 卸载与安装"></a>Step1 卸载与安装</h2><p>参考 <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1554y1n7zv?p=1&vd_source=a7668471a21be7862f05dce4742049de">双系统从安装到卸载</a></p>
-<h3 id="卸载"><a href="#卸载" class="headerlink" title="卸载"></a>卸载</h3><p>我的 Windows BIOS 模式为 UEFI</p>
-<p>删除Ubuntu，需要将其在磁盘内的分区和引导项一并删除。使用DiskGenius（磁盘精灵）</p>
-<ul>
-<li>删除文件类型为 Linux swap 和 EXT4 的分区，以及与它相临的ESP分区（这个就是引导项）删除完成后点保存更改</li>
-<li>左侧展开剩下的ESP中的EFI，点击ubuntu选项，把<code>..</code>下面的文件全部删除（彻底删除文件）</li>
-</ul>
-<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>制作系统盘 -&gt; F12进入bios，选择UEFI: KingstoneDataTraverler 3.0PMAP(我的U盘) -&gt; Install Ubuntu</p>
-<ul>
-<li>引导项。用了5G，文件类型选efi，不用选挂载点</li>
-<li>交换区，通常设置与内存一致（我是32G），文件类型选择交换空间后同样不需要选择挂载点</li>
-<li>根分区 50-100G都可以，文件类型是ext4日志文件系统，挂载点&#x2F;</li>
-<li>用户目录，即&#x2F;home目录，可以将剩余的空间都挂在到该目录，这个是系统安装完成后的主要工作目录，文件系统是ext4日志文件系统</li>
-<li>将Device for boot loader installation设置成刚刚分出去的efi引导项的设备名称</li>
-</ul>
-<h2 id="Step2-Software-安装"><a href="#Step2-Software-安装" class="headerlink" title="Step2 Software 安装"></a>Step2 Software 安装</h2><h3 id="vscode"><a href="#vscode" class="headerlink" title="vscode"></a>vscode</h3><ul>
-<li>插件<ul>
-<li>Markdown All in One (需要重新安装python3)</li>
-<li>Python (需要重新安装python3)</li>
-<li>Remote</li>
-<li>GitLens</li>
-<li>Rainbow Brackets</li>
-<li>Material Theme</li>
-<li>Material Icon Theme</li>
-</ul>
-</li>
-<li>设置<ul>
-<li>Auto Save：OnFoucsChange</li>
-</ul>
-</li>
-</ul>
-<h3 id="Sublime"><a href="#Sublime" class="headerlink" title="Sublime"></a>Sublime</h3><h3 id="zsh"><a href="#zsh" class="headerlink" title="zsh"></a>zsh</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install git</span><br><span class="line">sudo apt install zsh</span><br><span class="line">wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh</span><br><span class="line">chsh -s /bin/zsh</span><br></pre></td></tr></table></figure>
-<p>编辑<code>~/.zshrc</code>，ZSH_THEME&#x3D;”agnoster”，重启即可生效</p>
-<p>agnoster需要powerline字体，运行以下命令安装，重启terminal，显示正常</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install fonts-powerline</span><br></pre></td></tr></table></figure>
-<p>zsh插件</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-autosuggestions <span class="variable">$ZSH_CUSTOM</span>/plugins/zsh-autosuggestions</span><br><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-syntax-highlighting.git <span class="variable">$ZSH_CUSTOM</span>/plugins/zsh-syntax-highlighting</span><br></pre></td></tr></table></figure>
-
-<p>修改~&#x2F;.zshrc，添加</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> <span class="string">&quot;<span class="variable">$ZSH_CUSTOM</span>/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh&quot;</span></span><br><span class="line"><span class="built_in">source</span> <span class="string">&quot;<span class="variable">$ZSH_CUSTOM</span>/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p><code>source ~/.zshrc</code> 后生效</p>
-<h3 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h3><p>参考 <a target="_blank" rel="noopener" href="https://docs.docker.com/engine/install/ubuntu/">官方文档</a></p>
-<h3 id="中文输入法"><a href="#中文输入法" class="headerlink" title="中文输入法"></a>中文输入法</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install ibus</span><br><span class="line">sudo apt install ibus-pinyin</span><br></pre></td></tr></table></figure>
-<p>用户logout，重新登录，进入设置添加language</p>
-<h3 id="TeamViewer"><a href="#TeamViewer" class="headerlink" title="TeamViewer"></a>TeamViewer</h3><p>Grant easy access</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">tutorial</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">security</a>
         		</li>
       		
 		</ul>
 	</div>
 
-      
+          
 
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2022/06/15/Ubuntu18.04%E9%87%8D%E8%A3%85/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2022/06/22/KLEE/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          KLEE安装&amp;基础
-        
-      </div>
-    </a>
   
   
-    <a href="/2022/06/14/%E5%A5%87%E8%91%A9%E8%AF%B4%E7%AC%AC%E4%B8%83%E5%AD%A3/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">奇葩说第七季</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-        <div class="toc-container tooltip-left">
-            <i class="icon-font icon-category"></i>
-            <div class="tooltip tooltip-east">
-                <span class="tooltip-item">
-                </span>
-                <span class="tooltip-content">
-                    <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Step1-%E5%8D%B8%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85"><span class="toc-number">1.</span> <span class="toc-text">Step1 卸载与安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%B8%E8%BD%BD"><span class="toc-number">1.1.</span> <span class="toc-text">卸载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">1.2.</span> <span class="toc-text">安装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Step2-Software-%E5%AE%89%E8%A3%85"><span class="toc-number">2.</span> <span class="toc-text">Step2 Software 安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#vscode"><span class="toc-number">2.1.</span> <span class="toc-text">vscode</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sublime"><span class="toc-number">2.2.</span> <span class="toc-text">Sublime</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zsh"><span class="toc-number">2.3.</span> <span class="toc-text">zsh</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker"><span class="toc-number">2.4.</span> <span class="toc-text">docker</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E6%96%87%E8%BE%93%E5%85%A5%E6%B3%95"><span class="toc-number">2.5.</span> <span class="toc-text">中文输入法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TeamViewer"><span class="toc-number">2.6.</span> <span class="toc-text">TeamViewer</span></a></li></ol></li></ol>
-                    </div>
-                </span>
-            </div>
-        </div>
-        
-    </div>
-</aside>
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
-
+    
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/archives/">&amp;laquo; Prev</a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span>
+    </nav>
   
 
 
@@ -386,8 +232,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

@@ -17,7 +17,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/pics/LibOS-1.jpg">
 <meta property="article:published_time" content="2022-07-02T09:39:25.000Z">
-<meta property="article:modified_time" content="2022-08-18T01:33:19.683Z">
+<meta property="article:modified_time" content="2022-08-18T12:05:39.978Z">
 <meta property="article:author" content="Lanninger">
 <meta property="article:tag" content="security">
 <meta name="twitter:card" content="summary">
@@ -191,23 +191,22 @@
 <li><p>进程间通信<br>IPC不管理任何的硬件，它主要负责Linux系统中进程之间的通信</p>
 </li>
 </ul>
-<h2 id="LibOS"><a href="#LibOS" class="headerlink" title="LibOS"></a>LibOS</h2><h3 id="什么是LibOS"><a href="#什么是LibOS" class="headerlink" title="什么是LibOS"></a>什么是LibOS</h3><ol>
-<li>为什么会有LibOS的需求？</li>
-</ol>
+<h2 id="LibOS"><a href="#LibOS" class="headerlink" title="LibOS"></a>LibOS</h2><h3 id="什么是LibOS"><a href="#什么是LibOS" class="headerlink" title="什么是LibOS"></a>什么是LibOS</h3><p>1.为什么会有LibOS的需求？</p>
 <ul>
 <li>正常情况下我们开发一个基于SGX的应用，会用到SDK，需要手动去做一个安全边界的划分。</li>
 <li>比较famous的两个LibOS，Gramine和Occlum，属于SGX LibOS，它们是为了让普通应用在不做或做很少更改的情况下，就能够在 Intel SGX 上运行起来，使开发更加方便。</li>
 </ul>
-<ol start="2">
-<li>LibOS主要解决了什么问题，是如何解决的？</li>
-</ol>
+<p>2.LibOS主要解决了什么问题，是如何解决的？</p>
 <ul>
-<li>普通应用无法直接运行在SGX Enclave中的一个原因是在enclave内部无法使用system call，因为操作系统属于不受信任的外部空间，需要使用Ocall进行系统调用，并在使用它的返回结果前进行检查。</li>
-<li>LibOS 在APP和OS之间模拟了一个syscall layer。有两种处理系统调用的方法：可能会直接通过PAL层转发给OS，也可能在LibOS内部实现（这种方式可能存在功能缺失或不完整的问题，行为可能与预期不同。）</li>
+<li><p>普通应用无法直接运行在SGX Enclave中的一个原因是在enclave内部无法使用system call，因为操作系统属于不受信任的外部空间，需要使用Ocall进行系统调用，并在使用它的返回结果前进行检查。</p>
+</li>
+<li><p>LibOS 在APP和OS之间模拟了一个syscall layer。有两种处理系统调用的方法：可能会直接通过PAL层转发给OS，也可能在LibOS内部实现（这种方式可能存在功能缺失或不完整的问题，行为可能与预期不同。）</p>
+</li>
+<li><p>3.总结</p>
+</li>
+<li><p>将更多代码和功能放进了 enclave。这一举动会增加 TCB 的大小，但可以减少 enclave 和不受信任的操作系统之间的接口和攻击面的大小和复杂性。</p>
+</li>
 </ul>
-<ol start="3">
-<li>总结<br>  将更多代码和功能放进了 enclave。这一举动会增加 TCB 的大小，但可以减少 enclave 和不受信任的操作系统之间的接口和攻击面的大小和复杂性。</li>
-</ol>
 <h3 id="LibOS的结构"><a href="#LibOS的结构" class="headerlink" title="LibOS的结构"></a>LibOS的结构</h3><ul>
 <li>向下兼容host OS（比如linux），向上提供posix（一些api标准）<ul>
 <li>posix，可移植操作系统接口（Portable Operating System Interface of UNIX），为在各种Unix操作系统上运行的软件定义的API标准</li>
@@ -466,11 +465,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">tutorial</a>
+                <a href="javascript:void(0)" class="js-tag color4">security</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">security</a>
+                <a href="javascript:void(0)" class="js-tag color4">tutorial</a>
               </li>
              
               <li class="article-tag-list-item">
