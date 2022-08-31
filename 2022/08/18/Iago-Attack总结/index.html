@@ -16,7 +16,7 @@
 <meta property="og:description" content="Iago attack的分析和防御">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-08-18T01:45:09.000Z">
-<meta property="article:modified_time" content="2022-08-31T12:34:08.334Z">
+<meta property="article:modified_time" content="2022-08-31T12:42:45.988Z">
 <meta property="article:author" content="Lanninger">
 <meta property="article:tag" content="security">
 <meta name="twitter:card" content="summary">
@@ -190,9 +190,11 @@
 </ul>
 </li>
 <li>Taint analysis + Symbolic execution<ul>
-<li>Identifying Arbitrary Memory Access Vulnerabilities in Privilege-Separated Software (2015, ESORICS) <strong>(APP)</strong><h3 id="Understanding-TEE-Containers-Easy-to-Use-Hard-to-Trust"><a href="#Understanding-TEE-Containers-Easy-to-Use-Hard-to-Trust" class="headerlink" title="Understanding TEE Containers, Easy to Use? Hard to Trust"></a>Understanding TEE Containers, Easy to Use? Hard to Trust</h3></li>
+<li>Identifying Arbitrary Memory Access Vulnerabilities in Privilege-Separated Software (2015, ESORICS) <strong>(APP)</strong></li>
 </ul>
 </li>
+</ul>
+<h3 id="Understanding-TEE-Containers-Easy-to-Use-Hard-to-Trust"><a href="#Understanding-TEE-Containers-Easy-to-Use-Hard-to-Trust" class="headerlink" title="Understanding TEE Containers, Easy to Use? Hard to Trust"></a>Understanding TEE Containers, Easy to Use? Hard to Trust</h3><ul>
 <li>把位于app和OS之间的middleware统称为TEE container</li>
 <li>使用Fuzzing的方式自动化检查Ocall interface，主要关注Tcon对参数以及返回值的处理。</li>
 <li>Ocall在受保护的区域内发出，在OS中可以观察到这一调用，所以设计了一个独特的fuzzer，一部分位于enclave内，另一部分位于OS内<ul>
@@ -256,6 +258,9 @@
 <li>Dereference Behavior Analysis捕获从接口输入到可疑指令的所有约束。然后分析符号公式，判断测到可疑漏洞是否是有效的</li>
 </ul>
 <h3 id="VIA-Analyzing-Device-Interfaces-of-Protected-Virtual-Machines"><a href="#VIA-Analyzing-Device-Interfaces-of-Protected-Virtual-Machines" class="headerlink" title="VIA: Analyzing Device Interfaces of Protected Virtual Machines"></a>VIA: Analyzing Device Interfaces of Protected Virtual Machines</h3><p><a href="/VIA.html">_post&#x2F;VIA.md</a></p>
+<a href="#">Post not found: VIA.md VIA</a>
+
+
 <h2 id="Iago-Attack防御"><a href="#Iago-Attack防御" class="headerlink" title="Iago Attack防御"></a>Iago Attack防御</h2><ul>
 <li>用户空间内存管理器（Iago Attack提出 参考 Moving the Default Memory Manager Out of the Mach Kernel.）</li>
 <li>重新定义内核与应用程序之间的边界（Iago Attack提出 参考 Exokernel: an operating system architecture for application-level resource management 感觉类似库操作系统）</li>
@@ -263,10 +268,7 @@
 <li>Ratel，一个没有实现保护的 Tcon，实际上为添加安全检查打开了大门：为每个暴露的系统调用提供了一个接口，因此它的用户可以在那里添加保护代码。（Understanding TEE Containers, Easy to Use? Hard to Trust）</li>
 <li>Emilia 对每一种攻击分类都提供了对应的防御手段</li>
 </ul>
-<h3 id="BesFS-A-POSIX-Filesystem-for-Enclaves-with-a-Mechanized-Safety-Proof"><a href="#BesFS-A-POSIX-Filesystem-for-Enclaves-with-a-Mechanized-Safety-Proof" class="headerlink" title="BesFS: A POSIX Filesystem for Enclaves with a Mechanized Safety Proof"></a>BesFS: A POSIX Filesystem for Enclaves with a Mechanized Safety Proof</h3><p>Q：</p>
-<ul>
-<li>怎么来防御Iago Attack的？</li>
-</ul>
+<h3 id="BesFS-A-POSIX-Filesystem-for-Enclaves-with-a-Mechanized-Safety-Proof"><a href="#BesFS-A-POSIX-Filesystem-for-Enclaves-with-a-Mechanized-Safety-Proof" class="headerlink" title="BesFS: A POSIX Filesystem for Enclaves with a Mechanized Safety Proof"></a>BesFS: A POSIX Filesystem for Enclaves with a Mechanized Safety Proof</h3><p>Q：怎么来防御Iago Attack的？</p>
 <p>阅读笔记</p>
 <ul>
 <li>Abstract<ul>
